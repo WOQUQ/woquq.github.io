@@ -4,83 +4,19 @@
   
     
     <entry>
-      <title>test the search</title>
-      <link href="/2020/04/27/test-the-search/"/>
-      <url>/2020/04/27/test-the-search/</url>
+      <title>Git 指令学习</title>
+      <link href="/2020/05/09/git-%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/"/>
+      <url>/2020/05/09/git-%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</url>
       
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>test5</title>
-      <link href="/2020/04/27/test5/"/>
-      <url>/2020/04/27/test5/</url>
-      
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<blockquote><p>Git的强大毋庸置疑，但它的指令实在是有些多。除了平日用的最多的add,commit,push,还有非常多我没有掌握的重要指令。近日在GitHub上找到了一个关于Git指令学习的项目（<a href="https://github.com/pcottle/learnGitBranching" target="_blank" rel="noopener">项目链接</a>），写得非常出色。正好借此机会将Git指令系统地学习一遍。</p></blockquote><h1 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h1><table><thead><tr><th align="center">指令</th><th align="center">作用</th></tr></thead><tbody><tr><td align="center">git commit</td><td align="center">提交记录</td></tr><tr><td align="center">git branch</td><td align="center">创建新分支</td></tr><tr><td align="center">git checkout</td><td align="center">切换分支</td></tr><tr><td align="center">git merge</td><td align="center">合并分支</td></tr><tr><td align="center">git rebase</td><td align="center">线性合并分支</td></tr></tbody></table><h1 id="主要"><a href="#主要" class="headerlink" title="主要"></a>主要</h1><h2 id="基础篇"><a href="#基础篇" class="headerlink" title="基础篇"></a>基础篇</h2><h3 id="Git-Commit"><a href="#Git-Commit" class="headerlink" title="Git Commit"></a>Git Commit</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit</span><br></pre></td></tr></table></figure><p>Git 仓库中的提交记录保存的是你的目录下所有文件的快照。</p><p>Git 希望提交记录尽可能地轻量，因此在你每次进行提交时，它并不会盲目地复制整个目录。条件允许的情况下，它会将当前版本与仓库中的上一个版本进行对比，并把所有的差异打包到一起作为一个提交记录。</p><h3 id="Git-Branch"><a href="#Git-Branch" class="headerlink" title="Git Branch"></a>Git Branch</h3><p>Git 的分支也非常轻量。<strong>它们只是简单地指向某个提交纪录</strong> —— 仅此而已。所以许多 Git 爱好者传颂：<em>早建分支！多用分支！</em></p><p>这是因为即使创建再多分的支也不会造成储存或内存上的开销，并且按逻辑分解工作到不同的分支要比维护那些特别臃肿的分支简单多了。</p><p>在将分支和提交记录结合起来后，我们会看到两者如何协作。现在只要记住使用分支其实就相当于在说：“<em>我想基于这个提交以及它所有的父提交进行新的工作。</em>”</p><p>如下，创建一个名为test的新分支：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch <span class="built_in">test</span></span><br></pre></td></tr></table></figure><p><strong><em>注意，所谓分支仅仅只是指向了某一个提交记录</em></strong><br>如下，切换到test分支：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout <span class="built_in">test</span></span><br></pre></td></tr></table></figure><p>如下，在创建分支的同时切换到新的分支：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -b &lt;your-branch-name&gt;</span><br></pre></td></tr></table></figure><h3 id="Git-Merge"><a href="#Git-Merge" class="headerlink" title="Git Merge"></a>Git Merge</h3><p>在 Git 中合并两个分支时会产生一个特殊的提交记录，它有两个父节点。翻译成自然语言相当于：“<em>我要把这两个父节点本身及它们所有的祖先都包含进来。</em>”<br>如下，例如此时处于master分支，想要合并test分支：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git merge <span class="built_in">test</span></span><br></pre></td></tr></table></figure><p>如果 test 继承自 master，Git 什么都不用做，只是简单地把 master 移动到 test 所指向的那个提交记录。这也很好理解，因为master分支上并没有其它提交。</p><h3 id="Git-Rebase"><a href="#Git-Rebase" class="headerlink" title="Git Rebase"></a>Git Rebase</h3><p>第二种合并分支的方法是 git rebase。Rebase 实际上就是取出一系列的提交记录，“复制”它们，然后在另外一个地方逐个的放下去。<br>Rebase 的优势就是可以创造更线性的提交历史，这听上去有些难以理解。如果只允许使用 Rebase 的话，代码库的提交历史将会变得异常清晰。</p><p>如下，例如此时处于master分支，想要将test分支里的工作转移到master上：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git rebase <span class="built_in">test</span></span><br></pre></td></tr></table></figure><h2 id="高级篇"><a href="#高级篇" class="headerlink" title="高级篇"></a>高级篇</h2><h2 id="移动提交记录"><a href="#移动提交记录" class="headerlink" title="移动提交记录"></a>移动提交记录</h2><h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><h2 id="高级话题"><a href="#高级话题" class="headerlink" title="高级话题"></a>高级话题</h2><h1 id="远程"><a href="#远程" class="headerlink" title="远程"></a>远程</h1><h2 id="Push-amp-Pull-——-Git-远程仓库"><a href="#Push-amp-Pull-——-Git-远程仓库" class="headerlink" title="Push &amp; Pull —— Git 远程仓库"></a>Push &amp; Pull —— Git 远程仓库</h2><h2 id="关于-origin-和它的周边-——-Git-远程仓库高级操作"><a href="#关于-origin-和它的周边-——-Git-远程仓库高级操作" class="headerlink" title="关于 origin 和它的周边 —— Git 远程仓库高级操作"></a>关于 origin 和它的周边 —— Git 远程仓库高级操作</h2>]]></content>
       
       
       
         <tags>
             
-            <tag> 123 </tag>
+            <tag> git </tag>
             
-            <tag> 456 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>test4</title>
-      <link href="/2020/04/27/test4/"/>
-      <url>/2020/04/27/test4/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> abc </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>test3</title>
-      <link href="/2020/04/27/test3/"/>
-      <url>/2020/04/27/test3/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>test</title>
-      <link href="/2020/04/27/test/"/>
-      <url>/2020/04/27/test/</url>
-      
-        <content type="html"><![CDATA[<blockquote><p>此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是<br> 言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前此<br> 处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言此处是前言前言</p></blockquote><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> test;test2 </tag>
+            <tag> 学习笔记 </tag>
             
         </tags>
       
@@ -90,8 +26,8 @@
     
     <entry>
       <title>Hello World</title>
-      <link href="/2020/04/24/hello-world/"/>
-      <url>/2020/04/24/hello-world/</url>
+      <link href="/2020/04/29/hello-world/"/>
+      <url>/2020/04/29/hello-world/</url>
       
         <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
       
